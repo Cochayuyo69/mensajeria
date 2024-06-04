@@ -40,36 +40,16 @@ public class frmCursos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        btn2 = new javax.swing.JButton();
         btn4 = new javax.swing.JButton();
         btn1 = new javax.swing.JButton();
-        btn2 = new javax.swing.JButton();
         btn3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UCV CHAT");
-
-        jPanel1.setForeground(new java.awt.Color(102, 255, 102));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btn4.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
-        btn4.setText("jButton1");
-        btn4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn4ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, 220, 60));
-
-        btn1.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
-        btn1.setText("jButton1");
-        btn1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 220, 60));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btn2.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
         btn2.setText("jButton1");
@@ -78,7 +58,25 @@ public class frmCursos extends javax.swing.JFrame {
                 btn2ActionPerformed(evt);
             }
         });
-        jPanel1.add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 220, 60));
+        getContentPane().add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 220, 60));
+
+        btn4.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
+        btn4.setText("jButton1");
+        btn4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 280, 220, 60));
+
+        btn1.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
+        btn1.setText("jButton1");
+        btn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 220, 60));
 
         btn3.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 16)); // NOI18N
         btn3.setText("jButton1");
@@ -87,26 +85,14 @@ public class frmCursos extends javax.swing.JFrame {
                 btn3ActionPerformed(evt);
             }
         });
-        jPanel1.add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, 220, 60));
+        getContentPane().add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, 220, 60));
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 36)); // NOI18N
         jLabel1.setText("SELECCIONE EL CURSO:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/uc.jpg"))); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -183,6 +169,6 @@ public class frmCursos extends javax.swing.JFrame {
     private javax.swing.JButton btn3;
     private javax.swing.JButton btn4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
