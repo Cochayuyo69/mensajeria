@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
-    private List<String> mensajes;
+    private List<Mensaje> mensajes;
     private List<ChatListener> listeners;
 
     public Chat() {
@@ -12,17 +12,14 @@ public class Chat {
         listeners = new ArrayList<>();
     }
 
-    public synchronized void enviarMensaje(String mensaje) {
+    public synchronized void enviarMensaje(String contenido, String remitente) {
+        Mensaje mensaje = new Mensaje(contenido, remitente);
         mensajes.add(mensaje);
         notificarListeners();
     }
 
-    public synchronized String obtenerMensajes() {
-        StringBuilder sb = new StringBuilder();
-        for (String mensaje : mensajes) {
-            sb.append(mensaje).append("\n");
-        }
-        return sb.toString();
+    public synchronized List<Mensaje> getMensajes() {
+        return mensajes;
     }
 
     public synchronized void agregarListener(ChatListener listener) {
@@ -41,5 +38,13 @@ public class Chat {
 
     public interface ChatListener {
         void mensajeEnviado();
+    }
+    
+    public synchronized String obtenerMensajes() {
+        StringBuilder sb = new StringBuilder();
+        for (Mensaje mensaje : mensajes) {
+            sb.append(mensaje).append("\n");
+        }
+        return sb.toString();
     }
 }

@@ -7,7 +7,7 @@ package forms;
 import Constructores.Alumno;
 import Constructores.Curso;
 import Constructores.Grupo;
-import Constructores.Nodo;
+import java.awt.Color;
 import java.util.List;
 import mensajeria.Chat;
 
@@ -16,16 +16,26 @@ import mensajeria.Chat;
  * @author anton
  */
 public class frmMensajes extends javax.swing.JFrame implements Chat.ChatListener{
-    private List<Nodo<Curso>> listaNodosCursos;
-    private List<Nodo<Alumno>> listaNodosAlumnos;
-    private String grupo;
-    private Chat chat;
     
-    public frmMensajes(Chat chat) {
-        initComponents();
+    private Chat chat;
+    private String nombreUsuario;
+    private boolean f;
+    public frmMensajes(Chat chat, String nombreUsuario, boolean f) {
         this.chat = chat;
-        this.chat.agregarListener(this);
+        this.nombreUsuario = nombreUsuario;
+        this.f=f;
+        initComponents();
+        
+        chat.agregarListener(this); // Agregar el formulario mismo como listener
         actualizarMensajes();
+        cambiartitulo();
+        
+        // Añadir evento de foco para jtxtMensaje
+        jtxtMensaje.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtMensajeFocusGained(evt);
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
@@ -43,12 +53,12 @@ public class frmMensajes extends javax.swing.JFrame implements Chat.ChatListener
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Chat del Usuario");
 
-        jPanel1.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 153));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         lblTitulo.setText("Chat");
-        jPanel1.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 390, -1));
+        jPanel1.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 340, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ucvxs.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, -1, -1));
@@ -74,9 +84,7 @@ public class frmMensajes extends javax.swing.JFrame implements Chat.ChatListener
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,33 +96,33 @@ public class frmMensajes extends javax.swing.JFrame implements Chat.ChatListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
-        enviarMensaje(jtxtMensaje.getText());
+        enviarMensaje();
     }//GEN-LAST:event_btnEnviarActionPerformed
 
-    
-    //Lista de Cursos
-    public void setListaNodosCursos(List<Nodo<Curso>> listaNodosCursos) {
-        this.listaNodosCursos = listaNodosCursos;
-    }
-    
-    //Lista de Alumnos
-    public void setListaNodosAlumnos(List<Nodo<Alumno>> listaNodosAlumnos) {
-        this.listaNodosAlumnos = listaNodosAlumnos;
-    }
-    
-    //Lista de Grupos
-    public void setGrupo(String nombre) {
-        grupo= nombre;
-        lblTitulo.setText("Chat de " + grupo);
+    private void enviarMensaje() {
+        String mensaje = jtxtMensaje.getText().trim();
+        if (!mensaje.isEmpty()) {
+            chat.enviarMensaje(mensaje, nombreUsuario);
+            jtxtMensaje.setText("");
+        } else {
+            // Manejar caso de mensaje vacío
+            // Por ejemplo, mostrar un mensaje en el área de mensajes o lanzar una alerta
+        }
     }
 
-    
-    private void enviarMensaje(String mensaje) {
-        String mensajeE = mensaje;
-        if (!mensajeE.isEmpty()) {
-            chat.enviarMensaje(grupo + ": " + mensajeE);
-            actualizarMensajes();
-            jtxtMensaje.setText(""); // Limpiar el campo de entrada
+    private void cambiartitulo() {
+        if (f) {
+            lblTitulo.setText("Chat General");
+            jPanel1.setBackground(new Color(153, 255, 255));
+        } else {
+            lblTitulo.setText("Chat Grupal");
+            jPanel1.setBackground(new Color(255, 255, 153));
+        }
+    }
+
+    private void jtxtMensajeFocusGained(java.awt.event.FocusEvent evt) {
+        if (jtxtMensaje.getText().equals("Escriba un nuevo mensaje....")) {
+            jtxtMensaje.setText("");
         }
     }
 

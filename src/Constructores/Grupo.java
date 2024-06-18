@@ -25,4 +25,16 @@ public class Grupo {
     public void agregarAlumno(Alumno alumno) {
         integrantes.add(alumno);
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Grupo: ").append(nombre).append(", Integrantes: ");
+        for (Alumno alumno : integrantes) {
+            sb.append(alumno.getNombre()).append(" ");
+        }
+        return sb.toString().trim();
+    }
+    
+    
 }

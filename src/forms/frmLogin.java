@@ -6,27 +6,37 @@ package forms;
 
 import Constructores.Alumno;
 import Constructores.Curso;
+import Constructores.Docente;
 import Constructores.Grupo;
-import Constructores.Nodo;
+import Constructores.usuario;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import mensajeria.Chat;
+import Constructores.ListaUsuarios;
 
 /**
  *
  * @author anton
  */
 public class frmLogin extends javax.swing.JFrame {
-    // Lista de usuarios y contraseñas
-    private List<Usuario> usuarios;
     
-    public frmLogin() {
+    private List<Alumno> listaAlumnos;
+    private List<Docente> listaDocentes;
+    private List<Curso> listaCursos;
+    private List<Grupo> listaGrupos;
+    private ListaUsuarios listaUsuarios;
+    private Chat chat;  
+    
+    public frmLogin(List<Alumno> listaAlumnos, List<Docente> listaDocentes,List<Curso> listaCursos, List<Grupo> listaGrupos,ListaUsuarios listaUsuarios, Chat chat) {
         initComponents();
-        usuarios = new ArrayList<>();
-        usuarios.add(new Usuario("admin", "admin123"));
-        usuarios.add(new Usuario("user", "user123"));
+        this.listaAlumnos = listaAlumnos;
+        this.listaDocentes = listaDocentes;
+        this.listaCursos = listaCursos;
+        this.listaGrupos = listaGrupos;
+        this.listaUsuarios = listaUsuarios;
+        this.chat = chat;  
     }
 
     @SuppressWarnings("unchecked")
@@ -51,6 +61,7 @@ public class frmLogin extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -184,6 +195,7 @@ public class frmLogin extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
@@ -194,7 +206,7 @@ public class frmLogin extends javax.swing.JFrame {
 
     private void txtContraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraKeyReleased
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            
+            iniciarSesion();
         }
     }//GEN-LAST:event_txtContraKeyReleased
 
@@ -204,170 +216,84 @@ public class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearcuentaActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        String usuario = txtUsuario.getText();
-        String contra = new String(txtContra.getPassword());
-
-        boolean isAuthenticated = false;
-        
-        for (Usuario u : usuarios) {
-            if (u.getNombre().equals(usuario) && u.getContrasena().equals(contra)) {
-                isAuthenticated = true;
-                break;
-            }
-        }
-
-        if (isAuthenticated) {
-            JOptionPane.showMessageDialog(this, "Usuario correcto");
-            inicializar_todo();
-            
-            this.dispose(); // Close the current login form
-        } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        iniciarSesion();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
+    
+    private void iniciarSesion() {
+        String nombreUsuario = txtUsuario.getText();
+        String contrasena = new String(txtContra.getPassword());
 
+        // Depuración: Imprimir los datos de inicio de sesión
+        System.out.println("Usuario: " + nombreUsuario + ", Contraseña: " + contrasena);
+
+//        if (listaUsuarios.verificarUsuario(nombreUsuario, contrasena)) {
+            String tipoUsuario = listaUsuarios.obtenerTipoUsuario(nombreUsuario);
+            String mensajeBienvenida = "";
+
+            // Depuración: Imprimir el tipo de usuario
+            System.out.println("Tipo de Usuario: " + tipoUsuario);
+
+            if (tipoUsuario.equals("alumno")) {
+                String nombreAlumno = listaUsuarios.obtenerNombreAlumno(nombreUsuario);
+                mensajeBienvenida = "Bienvenido alumno: " + nombreAlumno;
+            } else if (tipoUsuario.equals("docente")) {
+                mensajeBienvenida = "Bienvenido docente";
+            } else {
+                mensajeBienvenida = "Bienvenido " + tipoUsuario;
+            }
+
+            JOptionPane.showMessageDialog(this, mensajeBienvenida);
+
+            // Aquí puedes redirigir al usuario a la pantalla principal dependiendo del tipo
+            frmPrincipal f = new frmPrincipal(listaAlumnos, listaDocentes, listaCursos, listaGrupos, listaUsuarios, nombreUsuario, chat);
+            f.setVisible(true);
+            this.dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmLogin().setVisible(true);
-            }
-        });
-    }
-    
-    private void inicializar_todo(){
-        // Crear una instancia de Chat
-        Chat chat = new Chat();
-
-        // Crear alumnos
-        Alumno alumno1 = new Alumno("Juan", "Primero");
-        Alumno alumno2 = new Alumno("Ana", "Primero");
-        Alumno alumno3 = new Alumno("Luis", "Segundo");
-        Alumno alumno4 = new Alumno("Maria", "Segundo");
-
-        // Crear nodos para los alumnos
-        Nodo<Alumno> nodoAlumno1 = new Nodo<>(alumno1);
-        Nodo<Alumno> nodoAlumno2 = new Nodo<>(alumno2);
-        Nodo<Alumno> nodoAlumno3 = new Nodo<>(alumno3);
-        Nodo<Alumno> nodoAlumno4 = new Nodo<>(alumno4);
-
-        // Crear una lista de nodos de Alumnos
-        List<Nodo<Alumno>> listaNodosAlumnos = new ArrayList<>();
-        listaNodosAlumnos.add(nodoAlumno1);
-        listaNodosAlumnos.add(nodoAlumno2);
-        listaNodosAlumnos.add(nodoAlumno3);
-        listaNodosAlumnos.add(nodoAlumno4);
-
-        // Crear grupos y agregar alumnos
-        Grupo grupo1 = new Grupo("Grupo 1");
-        grupo1.agregarAlumno(alumno1);
-        grupo1.agregarAlumno(alumno2);
-
-        Grupo grupo2 = new Grupo("Grupo 2");
-        grupo2.agregarAlumno(alumno3);
-        grupo2.agregarAlumno(alumno4);
-
-        // Crear nodos para los grupos
-        Nodo<Grupo> nodoGrupo1 = new Nodo<>(grupo1);
-        Nodo<Grupo> nodoGrupo2 = new Nodo<>(grupo2);
-
-        // Crear una lista de nodos de grupos
-        List<Nodo<Grupo>> listaNodosGrupos = new ArrayList<>();
-        listaNodosGrupos.add(nodoGrupo1);
-        listaNodosGrupos.add(nodoGrupo2);
-
-        // Crear cursos y agregar grupos
-        Curso curso = new Curso("Matemática II", "Lunes");
-        curso.agregarGrupo(grupo1);
-        curso.agregarGrupo(grupo2);
-
-        Curso curso2 = new Curso("Creatividad e Innovación", "Martes");
-        curso2.agregarGrupo(grupo1);
-        curso2.agregarGrupo(grupo2);
-
-        Curso curso3 = new Curso("Electrónica y Circuitos Digitales", "Miércoles");
-        curso3.agregarGrupo(grupo1);
-        curso3.agregarGrupo(grupo2);
-
-        Curso curso4 = new Curso("Empredimiento y Organización de Empresas", "Jueves");
-        curso4.agregarGrupo(grupo1);
-        curso4.agregarGrupo(grupo2);
-
-        // Crear nodos para los cursos
-        Nodo<Curso> nodoCurso = new Nodo<>(curso);
-        Nodo<Curso> nodoCurso2 = new Nodo<>(curso2);
-        Nodo<Curso> nodoCurso3 = new Nodo<>(curso3);
-        Nodo<Curso> nodoCurso4 = new Nodo<>(curso4);
-
-        // Crear una lista de nodos de cursos
-        List<Nodo<Curso>> listaNodosCursos = new ArrayList<>();
-        listaNodosCursos.add(nodoCurso);
-        listaNodosCursos.add(nodoCurso2);
-        listaNodosCursos.add(nodoCurso3);
-        listaNodosCursos.add(nodoCurso4);
-//
-//        // Mostrar la información almacenada en los nodos
-//        for (Grupo grupo : nodoCurso.getData().getGrupos()) {
-//            System.out.println("Grupo: " + grupo.getNombre());
-//            for (Alumno alumno : grupo.getIntegrantes()) {
-//                System.out.println("  Alumno: " + alumno.getNombre() + ", Ciclo: " + alumno.getCiclo());
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
 //            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(frmLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
-
-        frmCursos formularioCursos = new frmCursos(chat);
-        formularioCursos.setListaNodosCursos(listaNodosCursos);
-        formularioCursos.setListaNodosAlumnos(listaNodosAlumnos);
-        formularioCursos.setVisible(true);
-    }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmLogin().setVisible(true);
+//            }
+//        });
+//    }
     
-    // Clase interna para representar un usuario
-    private class Usuario {
-        private String nombre;
-        private String contrasena;
-
-        public Usuario(String nombre, String contrasena) {
-            this.nombre = nombre;
-            this.contrasena = contrasena;
-        }
-
-        public String getNombre() {
-            return nombre;
-        }
-
-        public String getContrasena() {
-            return contrasena;
-        }
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearcuenta;
