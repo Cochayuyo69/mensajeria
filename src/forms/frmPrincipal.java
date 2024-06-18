@@ -80,7 +80,10 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        tabbedPaneCustom2.setBackground(new java.awt.Color(255, 255, 255));
+        tabbedPaneCustom2.setBackground(new java.awt.Color(255, 102, 0));
+        tabbedPaneCustom2.setForeground(new java.awt.Color(51, 51, 51));
+        tabbedPaneCustom2.setSelectedColor(new java.awt.Color(255, 102, 51));
+        tabbedPaneCustom2.setUnselectedColor(new java.awt.Color(255, 102, 0));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
