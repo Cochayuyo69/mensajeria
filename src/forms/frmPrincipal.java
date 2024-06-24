@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package forms;
 
 import Constructores.Alumno;
@@ -9,16 +5,11 @@ import Constructores.Curso;
 import Constructores.Docente;
 import Constructores.Grupo;
 import Constructores.ListaUsuarios;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import mensajeria.Chat;
 
-/**
- *
- * @author anton
- */
 public class frmPrincipal extends javax.swing.JFrame {
     private List<Alumno> listaAlumnos;
     private List<Docente> listaDocentes;
@@ -41,10 +32,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         this.nombreUsuario = nombreUsuario;
         this.chat = chat;
         
-         
-        cargarCursos();
-        
-        alumnoOdocente();
+        cargarMensajeria();
     }
 
     @SuppressWarnings("unchecked")
@@ -214,74 +202,44 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneralActionPerformed
-        java.awt.EventQueue.invokeLater(() -> {
-            new frmMensajes(chat, nombreUsuario, true).setVisible(true);
-        });
+        new frmMensajes(chat, nombreUsuario, true).setVisible(true);
     }//GEN-LAST:event_btnGeneralActionPerformed
 
     private void btnGrupalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrupalActionPerformed
-        java.awt.EventQueue.invokeLater(() -> {
-            new frmMensajes(chat, nombreUsuario, false).setVisible(true);
-        });
+        new frmMensajes(chat, nombreUsuario, false).setVisible(true);
     }//GEN-LAST:event_btnGrupalActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
         String nombreCurso = cbxCursoHistorial.getSelectedItem().toString();
-        java.awt.EventQueue.invokeLater(() -> {
-            new frmHistorial(chat, nombreCurso).setVisible(true);
-        });
+        new frmHistorial(chat, nombreCurso).setVisible(true);
     }//GEN-LAST:event_btnMostrarActionPerformed
     
-    private void cargarCursos() {
-        // Limpiamos el combobox antes de cargar los cursos
+    private void cargarMensajeria() {
         cbxCursos.removeAllItems();
         cbxCursoHistorial.removeAllItems();
-        
-        // Obtenemos el objeto Alumno del usuario actual
+        cbxCursoHistorial.setEnabled(false);
+        btnMostrar.setEnabled(false);
+    
         Alumno alumnoActual = listaUsuarios.obtenerAlumno(nombreUsuario);
         if (alumnoActual != null) {
-            // El usuario actual es un alumno, cargamos los cursos matriculados
             List<Curso> cursosMatriculados = alumnoActual.getCursosMatriculados();
             for (Curso curso : cursosMatriculados) {
                 cbxCursos.addItem(curso.getNombre());
                 cbxCursoHistorial.addItem(curso.getNombre());
             }
-        } else {
-            // El usuario actual no es un alumno, verificamos si es un docente
-            Docente docenteActual = listaUsuarios.obtenerDocente(nombreUsuario);
-            if (docenteActual != null) {
-                // El usuario actual es un docente, cargamos los cursos que dicta
-                List<Curso> cursosDictados = docenteActual.getCursosAsignados();
-                for (Curso curso : cursosDictados) {
-                    cbxCursos.addItem(curso.getNombre());
-                    cbxCursoHistorial.addItem(curso.getNombre());
-                }
-            } else {
-                // Manejo de caso inesperado (debería ser manejado según el diseño de la aplicación)
-                System.out.println("El usuario no es ni alumno ni docente.");
-            }
-        }
-    }
-    
-    public void alumnoOdocente(){
-        cbxCursoHistorial.setEnabled(false);
-        btnMostrar.setEnabled(false);
-        Alumno alumnoActual = listaUsuarios.obtenerAlumno(nombreUsuario);
-        if (alumnoActual != null) {
-            // Configurar mensaje de bienvenida
             lblSaludo.setText("Bienvenido " + listaUsuarios.obtenerNombreAlumno(nombreUsuario));
-        } else {
-            // El usuario actual no es un alumno, verificamos si es un docente
-            Docente docenteActual = listaUsuarios.obtenerDocente(nombreUsuario);
-            if (docenteActual != null) {
-                cbxCursoHistorial.setEnabled(true);
-                btnMostrar.setEnabled(true);
-                // Configurar mensaje de bienvenida
-                lblSaludo.setText("Bienvenido " + listaUsuarios.obtenerDocente(nombreUsuario).getNombre());
-            } else {
-                // Manejo de caso inesperado (debería ser manejado según el diseño de la aplicación)
-                System.out.println("El usuario no es ni alumno ni docente.");
+            return;
+        }
+        Docente docenteActual = listaUsuarios.obtenerDocente(nombreUsuario);
+        if (docenteActual != null) {
+            List<Curso> cursosDictados = docenteActual.getCursosAsignados();
+            for (Curso curso : cursosDictados) {
+                cbxCursos.addItem(curso.getNombre());
+                cbxCursoHistorial.addItem(curso.getNombre());
             }
+            cbxCursoHistorial.setEnabled(true);
+            btnMostrar.setEnabled(true);
+            lblSaludo.setText("Bienvenido " + listaUsuarios.obtenerDocente(nombreUsuario).getNombre());
         }
     }
     
